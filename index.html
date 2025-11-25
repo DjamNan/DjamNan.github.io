@@ -1,1 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Name - Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            background-color: #0a0a0a;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .terminal-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #000;
+            border: 2px solid #00ff00;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+        }
+
+        .terminal-header {
+            border-bottom: 1px solid #00ff00;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .terminal-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .red { background-color: #ff5f56; }
+        .yellow { background-color: #ffbd2e; }
+        .green { background-color: #27c93f; }
+
+        .output-line {
+            margin-bottom: 10px;
+        }
+
+        .prompt {
+            color: #00ff00;
+            font-weight: bold;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 18px;
+            background-color: #00ff00;
+            animation: blink 1s infinite;
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .command {
+            color: #00d4ff;
+        }
+
+        .menu {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #0a0a0a;
+            border-left: 3px solid #00ff00;
+        }
+
+        .menu-item {
+            color: #00d4ff;
+            cursor: pointer;
+            padding: 5px 0;
+            transition: all 0.3s;
+        }
+
+        .menu-item:hover {
+            color: #00ff00;
+            padding-left: 10px;
+        }
+
+        .project {
+            margin: 15px 0;
+            padding: 15px;
+            border: 1px solid #00ff00;
+            background-color: #0a0a0a;
+        }
+
+        .project-title {
+            color: #ffff00;
+            font-size: 1.2em;
+            margin-bottom: 8px;
+        }
+
+        .project-desc {
+            color: #00cc00;
+            margin-bottom: 8px;
+        }
+
+        .project-link {
+            color: #00d4ff;
+            text-decoration: none;
+            border-bottom: 1px dotted #00d4ff;
+        }
+
+        .project-link:hover {
+            color: #00ff00;
+            border-bottom-color: #00ff00;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .ascii-art {
+            color: #00ff00;
+            font-size: 0.7em;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .error {
+            color: #ff0000;
+        }
+
+        .success {
+            color: #00ff00;
+        }
+
+        a {
+            color: #00d4ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal-container">
+        <div class="terminal-header">
+            <span class="terminal-button red"></span>
+            <span class="terminal-button yellow"></span>
+            <span class="terminal-button green"></span>
+            <span style="margin-left: 10px; color: #00ff00;">guest@portfolio:~</span>
+        </div>
+
+        <div class="ascii-art">
+ _____           _    __       _ _       
+|  __ \         | |  / _|     | (_)      
+| |__) |__  _ __| |_| |_ ___  | |_  ___  
+|  ___/ _ \| '__| __|  _/ _ \ | | |/ _ \ 
+| |  | (_) | |  | |_| || (_) || | | (_) |
+|_|   \___/|_|   \__|_| \___/ |_|_|\___/ 
+        </div>
+
+        <div id="output">
+            <div class="output-line">
+                <span class="success">Welcome to my portfolio terminal!</span>
+            </div>
+            <div class="output-line">
+                Type <span class="command">help</span> to see available commands.
+            </div>
+            <div class="output-line">
+                <span class="prompt">guest@portfolio:~$</span> <span id="typed-text"></span><span class="cursor"></span>
+            </div>
+        </div>
+
+        <div class="menu" id="menu">
+            <div class="output-line"><span class="prompt">Available commands:</span></div>
+            <div class="menu-item" onclick="executeCommand('about')">→ about - Learn more about me</div>
+            <div class="menu-item" onclick="executeCommand('projects')">→ projects - View my work</div>
+            <div class="menu-item" onclick="executeCommand('skills')">→ skills - Technical skills</div>
+            <div class="menu-item" onclick="executeCommand('contact')">→ contact - Get in touch</div>
+            <div class="menu-item" onclick="executeCommand('clear')">→ clear - Clear terminal</div>
+        </div>
+
+        <div id="content-area"></div>
+    </div>
+
+    <script>
+        const textToType = "help";
+        const typedTextElement = document.getElementById('typed-text');
+        let charIndex = 0;
+
+        function typeText() {
+            if (charIndex < textToType.length) {
+                typedTextElement.textContent += textToType.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeText, 100);
+            } else {
+                setTimeout(() => {
+                    document.getElementById('menu').style.display = 'block';
+                }, 500);
+            }
+        }
+
+        setTimeout(typeText, 1000);
+
+        function executeCommand(cmd) {
+            const contentArea = document.getElementById('content-area');
+            
+            // Clear previous content
+            contentArea.innerHTML = '';
+
+            // Add command execution line
+            const commandLine = document.createElement('div');
+            commandLine.className = 'output-line';
+            commandLine.innerHTML = `<span class="prompt">guest@portfolio:~$</span> <span class="command">${cmd}</span>`;
+            contentArea.appendChild(commandLine);
+
+            // Add blank line
+            contentArea.appendChild(document.createElement('br'));
+
+            // Execute command
+            switch(cmd) {
+                case 'about':
+                    contentArea.innerHTML += `
+                        <div class="section active">
+                            <div class="output-line"><span style="color: #ffff00;">▸ About Me</span></div>
+                            <div class="output-line">─────────────────────────────────────────────</div>
+                            <div class="output-line">Hi! I'm [Your Name], a [Your Role] passionate about creating</div>
+                            <div class="output-line">innovative solutions and beautiful experiences.</div>
+                            <div class="output-line"></div>
+                            <div class="output-line">I specialize in [Your Specialty] and love working on</div>
+                            <div class="output-line">projects that challenge me to grow and learn.</div>
+                            <div class="output-line"></div>
+                            <div class="output-line">Education: [Your Degree/School]</div>
+                            <div class="output-line">Location: [Your Location]</div>
+                            <div class="output-line">Status: Available for opportunities</div>
+                        </div>
+                    `;
+                    break;
+
+                case 'projects':
+                    contentArea.innerHTML += `
+                        <div class="section active">
+                            <div class="output-line"><span style="color: #ffff00;">▸ Projects</span></div>
+                            <div class="output-line">─────────────────────────────────────────────</div>
+                            
+                            <div class="project">
+                                <div class="project-title">→ Project One</div>
+                                <div class="project-desc">Description of your amazing project. What problem it solves, technologies used, and impact.</div>
+                                <div class="output-line">Tech: React, Node.js, MongoDB</div>
+                                <div class="output-line"><a href="#" class="project-link">View Project →</a> | <a href="#" class="project-link">GitHub →</a></div>
+                            </div>
+
+                            <div class="project">
+                                <div class="project-title">→ Project Two</div>
+                                <div class="project-desc">Another cool project showcasing your skills. Highlight unique features and outcomes.</div>
+                                <div class="output-line">Tech: Python, TensorFlow, Docker</div>
+                                <div class="output-line"><a href="#" class="project-link">View Project →</a> | <a href="#" class="project-link">GitHub →</a></div>
+                            </div>
+
+                            <div class="project">
+                                <div class="project-title">→ Project Three</div>
+                                <div class="project-desc">Third project demonstrating your versatility and problem-solving abilities.</div>
+                                <div class="output-line">Tech: Vue.js, Firebase, Tailwind CSS</div>
+                                <div class="output-line"><a href="#" class="project-link">View Project →</a> | <a href="#" class="project-link">GitHub →</a></div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+
+                case 'skills':
+                    contentArea.innerHTML += `
+                        <div class="section active">
+                            <div class="output-line"><span style="color: #ffff00;">▸ Technical Skills</span></div>
+                            <div class="output-line">─────────────────────────────────────────────</div>
+                            <div class="output-line"></div>
+                            <div class="output-line"><span style="color: #00d4ff;">Languages:</span></div>
+                            <div class="output-line">  ├─ JavaScript/TypeScript ████████████ 90%</div>
+                            <div class="output-line">  ├─ Python ██████████░░ 85%</div>
+                            <div class="output-line">  ├─ HTML/CSS ████████████ 95%</div>
+                            <div class="output-line">  └─ Java ████████░░░░ 70%</div>
+                            <div class="output-line"></div>
+                            <div class="output-line"><span style="color: #00d4ff;">Frameworks & Tools:</span></div>
+                            <div class="output-line">  ├─ React, Vue, Angular</div>
+                            <div class="output-line">  ├─ Node.js, Express</div>
+                            <div class="output-line">  ├─ Git, Docker, AWS</div>
+                            <div class="output-line">  └─ MongoDB, PostgreSQL</div>
+                            <div class="output-line"></div>
+                            <div class="output-line"><span style="color: #00d4ff;">Other:</span></div>
+                            <div class="output-line">  ├─ UI/UX Design</div>
+                            <div class="output-line">  ├─ Agile/Scrum</div>
+                            <div class="output-line">  └─ RESTful APIs</div>
+                        </div>
+                    `;
+                    break;
+
+                case 'contact':
+                    contentArea.innerHTML += `
+                        <div class="section active">
+                            <div class="output-line"><span style="color: #ffff00;">▸ Contact Information</span></div>
+                            <div class="output-line">─────────────────────────────────────────────</div>
+                            <div class="output-line"></div>
+                            <div class="output-line">📧 Email: <a href="mailto:your.email@example.com">your.email@example.com</a></div>
+                            <div class="output-line">🔗 LinkedIn: <a href="https://linkedin.com/in/yourprofile" target="_blank">linkedin.com/in/yourprofile</a></div>
+                            <div class="output-line">💻 GitHub: <a href="https://github.com/yourusername" target="_blank">github.com/yourusername</a></div>
+                            <div class="output-line">🐦 Twitter: <a href="https://twitter.com/yourhandle" target="_blank">@yourhandle</a></div>
+                            <div class="output-line"></div>
+                            <div class="output-line"><span class="success">Feel free to reach out! I'm always open to interesting conversations and opportunities.</span></div>
+                        </div>
+                    `;
+                    break;
+
+                case 'clear':
+                    contentArea.innerHTML = '';
+                    document.getElementById('menu').style.display = 'block';
+                    return;
+
+                default:
+                    contentArea.innerHTML += `
+                        <div class="output-line error">Command not found: ${cmd}</div>
+                        <div class="output-line">Type <span class="command">help</span> to see available commands.</div>
+                    `;
+            }
+
+            // Scroll to bottom
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+    </script>
+</body>
+</html>
