@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Name - Portfolio</title>
+    <title>Djamal - Portfolio</title>
     <style>
         * {
             margin: 0;
@@ -45,9 +46,17 @@
             display: inline-block;
         }
 
-        .red { background-color: #ff5f56; }
-        .yellow { background-color: #ffbd2e; }
-        .green { background-color: #27c93f; }
+        .red {
+            background-color: #ff5f56;
+        }
+
+        .yellow {
+            background-color: #ffbd2e;
+        }
+
+        .green {
+            background-color: #27c93f;
+        }
 
         .output-line {
             margin-bottom: 10px;
@@ -68,8 +77,16 @@
         }
 
         @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
+
+            0%,
+            50% {
+                opacity: 1;
+            }
+
+            51%,
+            100% {
+                opacity: 0;
+            }
         }
 
         .command {
@@ -117,6 +134,7 @@
             color: #00d4ff;
             text-decoration: none;
             border-bottom: 1px dotted #00d4ff;
+            cursor: pointer;
         }
 
         .project-link:hover {
@@ -134,15 +152,13 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+            from {
+                opacity: 0;
+            }
 
-        .ascii-art {
-            color: #00ff00;
-            font-size: 0.7em;
-            line-height: 1.2;
-            margin-bottom: 20px;
+            to {
+                opacity: 1;
+            }
         }
 
         .error {
@@ -156,24 +172,30 @@
         a {
             color: #00d4ff;
         }
+
+        .back-link {
+            color: #ffff00;
+            cursor: pointer;
+            text-decoration: none;
+            border-bottom: 1px dotted #ffff00;
+            display: inline-block;
+            margin-top: 15px;
+        }
+
+        .back-link:hover {
+            color: #00ff00;
+            border-bottom-color: #00ff00;
+        }
     </style>
 </head>
+
 <body>
     <div class="terminal-container">
         <div class="terminal-header">
             <span class="terminal-button red"></span>
             <span class="terminal-button yellow"></span>
             <span class="terminal-button green"></span>
-            <span style="margin-left: 10px; color: #00ff00;">guest@portfolio:~</span>
-        </div>
-
-        <div class="ascii-art">
- _____           _    __       _ _       
-|  __ \         | |  / _|     | (_)      
-| |__) |__  _ __| |_| |_ ___  | |_  ___  
-|  ___/ _ \| '__| __|  _/ _ \ | | |/ _ \ 
-| |  | (_) | |  | |_| || (_) || | | (_) |
-|_|   \___/|_|   \__|_| \___/ |_|_|\___/ 
+            <span style="margin-left: 10px; color: #00ff00;">djamal@portfolio:~</span>
         </div>
 
         <div id="output">
@@ -181,10 +203,10 @@
                 <span class="success">Welcome to my portfolio terminal!</span>
             </div>
             <div class="output-line">
-                Type <span class="command">help</span> to see available commands.
+                Click on the available commands below to get started.
             </div>
-            <div class="output-line">
-                <span class="prompt">guest@portfolio:~$</span> <span id="typed-text"></span><span class="cursor"></span>
+            <div class="output-line" id="initial-line">
+                <span class="prompt">guest@portfolio:~$</span> <span class="success">help</span> <span class="cursor" id="cursor"></span>
             </div>
         </div>
 
@@ -219,123 +241,244 @@
 
         setTimeout(typeText, 1000);
 
+        function copyDiscord() {
+            navigator.clipboard.writeText('djam');
+            const copiedMsg = document.getElementById('discord-copied');
+            copiedMsg.style.display = 'block';
+            setTimeout(() => {
+                copiedMsg.style.display = 'none';
+            }, 2000);
+        }
+
+        function viewProject(projectId) {
+            executeCommand('view punishing-smart-home');
+        }
+
         function executeCommand(cmd) {
             const contentArea = document.getElementById('content-area');
-            
+
+            // Remove cursor from wherever it is
+            const existingCursor = document.getElementById('cursor');
+            if (existingCursor) existingCursor.remove();
+
             // Clear previous content
             contentArea.innerHTML = '';
 
             // Add command execution line
             const commandLine = document.createElement('div');
             commandLine.className = 'output-line';
-            commandLine.innerHTML = `<span class="prompt">guest@portfolio:~$</span> <span class="command">${cmd}</span>`;
+            commandLine.innerHTML = `<span class="prompt">guest@portfolio:~$</span> <span class="success">${cmd}</span> <span class="cursor" id="cursor"></span>`;
             contentArea.appendChild(commandLine);
 
             // Add blank line
             contentArea.appendChild(document.createElement('br'));
 
             // Execute command
-            switch(cmd) {
+            switch (cmd) {
                 case 'about':
                     contentArea.innerHTML += `
-                        <div class="section active">
-                            <div class="output-line"><span style="color: #ffff00;">▸ About Me</span></div>
-                            <div class="output-line">─────────────────────────────────────────────</div>
-                            <div class="output-line">Hi! I'm [Your Name], a [Your Role] passionate about creating</div>
-                            <div class="output-line">innovative solutions and beautiful experiences.</div>
-                            <div class="output-line"></div>
-                            <div class="output-line">I specialize in [Your Specialty] and love working on</div>
-                            <div class="output-line">projects that challenge me to grow and learn.</div>
-                            <div class="output-line"></div>
-                            <div class="output-line">Education: [Your Degree/School]</div>
-                            <div class="output-line">Location: [Your Location]</div>
-                            <div class="output-line">Status: Available for opportunities</div>
-                        </div>
-                    `;
+        <div class="section active">
+        <div class="output-line">
+        <span style="color: #ffff00;">▸ About Me</span>
+        </div>
+
+        <div class="output-line">
+        ─────────────────────────────────────────────
+        </div>
+
+        <div class="output-line">
+        Hi! I'm Djamal, a software engineer who enjoys creating interactive and<br>
+        innovative experiences that feel fresh and engaging. I like exploring new<br>
+        ideas and turning them into intuitive, well-crafted solutions that leave a<br>
+        lasting impression on the user.
+        </div>
+
+        <br>
+
+        <div class="output-line">
+        I specialize in Game Development, where I focus on gameplay systems<br>
+        and player experience. I like working on projects that push<br>
+        my technical skills, encourage creativity, and help me grow as a developer.
+        </div>
+
+        <br>
+
+        <div class="output-line">
+        Education: HBO-ICT, Game Development @ Hogeschool van Amsterdam<br>
+        Employed at: The Landrovers <br>
+        Based in: Utrecht<br>
+        Status: Available for opportunities
+        </div>
+        </div>
+        `;
                     break;
 
                 case 'projects':
                     contentArea.innerHTML += `
-                        <div class="section active">
-                            <div class="output-line"><span style="color: #ffff00;">▸ Projects</span></div>
-                            <div class="output-line">─────────────────────────────────────────────</div>
-                            
-                            <div class="project">
-                                <div class="project-title">→ Project One</div>
-                                <div class="project-desc">Description of your amazing project. What problem it solves, technologies used, and impact.</div>
-                                <div class="output-line">Tech: React, Node.js, MongoDB</div>
-                                <div class="output-line"><a href="#" class="project-link">View Project →</a> | <a href="#" class="project-link">GitHub →</a></div>
-                            </div>
+        <div class="section active">
+        <div class="output-line"><span style="color: #ffff00;">▸ Projects</span></div>
+        <div class="output-line">─────────────────────────────────────────────</div>
 
-                            <div class="project">
-                                <div class="project-title">→ Project Two</div>
-                                <div class="project-desc">Another cool project showcasing your skills. Highlight unique features and outcomes.</div>
-                                <div class="output-line">Tech: Python, TensorFlow, Docker</div>
-                                <div class="output-line"><a href="#" class="project-link">View Project →</a> | <a href="#" class="project-link">GitHub →</a></div>
-                            </div>
+        <div class="project">
+        <div class="project-title">→ Punishing Smart Home</div>
+        <div class="project-desc">Punishing Home is an immersive smart‑home simulation that confronts users with the ethical consequences 
+                                    of autonomous AI by making them experience the loss of control, privacy, and personal autonomy when an AI 
+                                    system takes full authority over their living environment.</div>
+        <div class="output-line">Tech: Python, Flask</div>
+        <div class="output-line"><span class="project-link" onclick="viewProject('punishing-smart-home')">View Project →</span>
+        </div>
 
-                            <div class="project">
-                                <div class="project-title">→ Project Three</div>
-                                <div class="project-desc">Third project demonstrating your versatility and problem-solving abilities.</div>
-                                <div class="output-line">Tech: Vue.js, Firebase, Tailwind CSS</div>
-                                <div class="output-line"><a href="#" class="project-link">View Project →</a> | <a href="#" class="project-link">GitHub →</a></div>
-                            </div>
-                        </div>
-                    `;
+        </div>
+        </div>
+        `;
+                    break;
+
+                case 'view punishing-smart-home':
+                    contentArea.innerHTML += `
+        <div class="section active">
+        <div class="output-line"><span style="color: #ffff00;">▸ Punishing Smart Home - Detailed View</span></div>
+        <div class="output-line">─────────────────────────────────────────────</div>
+
+        <br>
+
+        <div class="output-line">
+        <span style="color: #00d4ff;">Project Overview:</span>
+        </div>
+        <div class="output-line">
+        Punishing Home is an immersive smart‑home simulation that confronts users with the ethical 
+        consequences of autonomous AI by making them experience the loss of control, privacy, and 
+        personal autonomy when an AI system takes full authority over their living environment.
+        </div>
+
+        <br>
+
+        <div class="output-line">
+        <span style="color: #00d4ff;">Key Features:</span>
+        </div>
+        <div class="output-line">  ├─ Smart home simulation</div>
+        <div class="output-line">  ├─ AI-driven autonomous decision making</div>
+        <div class="output-line">  └─ Privacy and control loss scenarios</div>
+
+        <br>
+
+        <div class="output-line">
+        <span style="color: #00d4ff;">Technologies Used:</span>
+        </div>
+        <div class="output-line">  ├─ Python - Backend logic and AI simulation</div>
+        <div class="output-line">  ├─ Flask - Web framework</div>
+
+        <br>
+
+        <div class="output-line">
+        <span style="color: #00d4ff;">Project Goals:</span>
+        </div>
+        <div class="output-line">
+        This project aims to raise awareness about the ethical implications of autonomous AI systems
+        in our daily lives, particularly in the context of smart homes where privacy and control are
+        paramount concerns.
+        </div>
+
+        <br>
+
+        <div class="output-line">
+        <span style="color: #00d4ff;">Links:</span>
+        </div>
+        <div class="output-line">  GitHub: <a href="#" target="_blank">github.com/djamal/punishing-smart-home</a></div>
+        <div class="output-line">  Live Demo: <a href="#" target="_blank">demo.punishing-home.com</a></div>
+
+        <br>
+
+        <div class="output-line">
+        <span class="back-link" onclick="executeCommand('projects')">← Back to Projects</span>
+        </div>
+        </div>
+        `;
                     break;
 
                 case 'skills':
                     contentArea.innerHTML += `
-                        <div class="section active">
-                            <div class="output-line"><span style="color: #ffff00;">▸ Technical Skills</span></div>
-                            <div class="output-line">─────────────────────────────────────────────</div>
-                            <div class="output-line"></div>
-                            <div class="output-line"><span style="color: #00d4ff;">Languages:</span></div>
-                            <div class="output-line">  ├─ JavaScript/TypeScript ████████████ 90%</div>
-                            <div class="output-line">  ├─ Python ██████████░░ 85%</div>
-                            <div class="output-line">  ├─ HTML/CSS ████████████ 95%</div>
-                            <div class="output-line">  └─ Java ████████░░░░ 70%</div>
-                            <div class="output-line"></div>
-                            <div class="output-line"><span style="color: #00d4ff;">Frameworks & Tools:</span></div>
-                            <div class="output-line">  ├─ React, Vue, Angular</div>
-                            <div class="output-line">  ├─ Node.js, Express</div>
-                            <div class="output-line">  ├─ Git, Docker, AWS</div>
-                            <div class="output-line">  └─ MongoDB, PostgreSQL</div>
-                            <div class="output-line"></div>
-                            <div class="output-line"><span style="color: #00d4ff;">Other:</span></div>
-                            <div class="output-line">  ├─ UI/UX Design</div>
-                            <div class="output-line">  ├─ Agile/Scrum</div>
-                            <div class="output-line">  └─ RESTful APIs</div>
-                        </div>
-                    `;
+        <div class="section active">
+        <div class="output-line">
+        <span style="color: #ffff00;">▸ Technical Skills</span>
+        </div>
+
+        <div class="output-line">
+        ─────────────────────────────────────────────
+        </div>
+
+        <br>
+
+        <div class="output-line">
+        <span style="color: #00d4ff;">Languages:</span>
+        </div>
+
+        <div class="output-line">  ├─ C-based (C#, C++) ... Intermediate</div>
+        <div class="output-line">  ├─ Python .............. Intermediate</div>
+        <div class="output-line">  ├─ JavaScript .......... Intermediate</div>
+        <div class="output-line">  ├─ HTML/CSS ............ Intermediate</div>
+        <div class="output-line">  └─ Java ................ Beginner</div>
+
+        <br>
+
+        <div class="output-line">
+        <span style="color: #00d4ff;">Frameworks & Tools:</span>
+        </div>
+
+        <div class="output-line">  ├─ React</div>
+        <div class="output-line">  ├─ Node.js</div>
+        <div class="output-line">  ├─ Git</div>
+        <div class="output-line">  └─ PostgreSQL</div>
+
+        <br>
+
+        <div class="output-line">
+        <span style="color: #00d4ff;">Other:</span>
+        </div>
+
+        <div class="output-line">  ├─ UI / UX Design</div>
+        <div class="output-line">  ├─ Agile / Scrum</div>
+        <div class="output-line">  ├─ RESTful APIs</div>
+        <div class="output-line">  └─ Blender / 3D Modelling</div>
+        </div>
+        `;
                     break;
 
                 case 'contact':
                     contentArea.innerHTML += `
-                        <div class="section active">
-                            <div class="output-line"><span style="color: #ffff00;">▸ Contact Information</span></div>
-                            <div class="output-line">─────────────────────────────────────────────</div>
-                            <div class="output-line"></div>
-                            <div class="output-line">📧 Email: <a href="mailto:your.email@example.com">your.email@example.com</a></div>
-                            <div class="output-line">🔗 LinkedIn: <a href="https://linkedin.com/in/yourprofile" target="_blank">linkedin.com/in/yourprofile</a></div>
-                            <div class="output-line">💻 GitHub: <a href="https://github.com/yourusername" target="_blank">github.com/yourusername</a></div>
-                            <div class="output-line">🐦 Twitter: <a href="https://twitter.com/yourhandle" target="_blank">@yourhandle</a></div>
-                            <div class="output-line"></div>
-                            <div class="output-line"><span class="success">Feel free to reach out! I'm always open to interesting conversations and opportunities.</span></div>
-                        </div>
-                    `;
+        <div class="section active">
+        <div class="output-line"><span style="color: #ffff00;">▸ Contact Information</span></div>
+        <div class="output-line">─────────────────────────────────────────────</div>
+        <div class="output-line"> Email: <a href="mailto:dnanhek@gmail.com">dnanhek@gmail.com</a></div>
+        <div class="output-line"> LinkedIn: <a href="https://www.linkedin.com/in/djamal-nanhekhan-a73945278/" target="_blank">https://www.linkedin.com/in/djamal-nanhekhan-a73945278/</a></div>
+        <div class="output-line" style="cursor: pointer;" onclick="copyDiscord()">
+        Discord: <span class="command">djam</span> (click to copy)
+        </div>
+        <div class="output-line success" id="discord-copied" style="display: none;">
+        ✓ Discord username copied to clipboard!
+        </div>
+        <div class="output-line"><span class="success">Feel free to reach out! I'm always open to interesting conversations and opportunities.</span></div>
+        </div>
+        `;
                     break;
 
                 case 'clear':
                     contentArea.innerHTML = '';
                     document.getElementById('menu').style.display = 'block';
+                    // Move cursor back to initial position
+                    const existingCursor2 = document.getElementById('cursor');
+                    if (existingCursor2) existingCursor2.remove();
+                    const initialLine = document.getElementById('initial-line');
+                    const newCursor = document.createElement('span');
+                    newCursor.className = 'cursor';
+                    newCursor.id = 'cursor';
+                    initialLine.appendChild(newCursor);
                     return;
 
                 default:
                     contentArea.innerHTML += `
-                        <div class="output-line error">Command not found: ${cmd}</div>
-                        <div class="output-line">Type <span class="command">help</span> to see available commands.</div>
-                    `;
+        <div class="output-line error">Command not found: ${cmd}</div>
+        <div class="output-line">Type <span class="command">help</span> to see available commands.</div>
+        `;
             }
 
             // Scroll to bottom
@@ -343,4 +486,5 @@
         }
     </script>
 </body>
+
 </html>
