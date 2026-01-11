@@ -195,7 +195,7 @@
             <span class="terminal-button red"></span>
             <span class="terminal-button yellow"></span>
             <span class="terminal-button green"></span>
-            <span style="margin-left: 10px; color: #00ff00;">djamal@portfolio:~</span>
+            <span style="margin-left: 10px; color: #00ff00;">guest@portfolio:~</span>
         </div>
 
         <div id="output">
@@ -252,6 +252,58 @@
 
         function viewProject(projectId) {
             executeCommand('view punishing-smart-home');
+        }
+
+        function showImage(imgId) {
+            const viewer = document.getElementById('image-viewer');
+            
+            const images = {
+                'img1': {
+                    src: 'RoomLayout.png',
+                    caption: '▸ Smart Home room layout',
+                    size: '100%'
+                },
+                'img2': {
+                    src: 'Doorbell.png',
+                    caption: '▸ Smart Home entrance with smart doorbell',
+                    size: '100%'
+                },
+                'img3': {
+                    src: 'InsideRoom.png',
+                    caption: '▸ View inside of the room',
+                    size: '100%'
+                },
+                'img4': {
+                    src: 'SmartPlugs.png',
+                    caption: '▸ Smart plugs that control devices',
+                    size: '100%'
+                },
+                'img5': {
+                    src: 'SmartThermostat.gif',
+                    caption: '▸ Smart thermostat that can be controlled',
+                    size: '50%'
+                },
+                'img6': {
+                    src: 'BobTalking.gif',
+                    caption: '▸ Bob talking whilst getting more mad',
+                    size: '100%'
+                }
+            };
+
+            const img = images[imgId];
+            viewer.innerHTML = `
+                <div style="border: 2px solid #00ff00; padding: 10px; margin: 15px 0; background-color: #0a0a0a;">
+                    <img src="${img.src}" style="width: ${img.size}; display: block; border: 1px solid #00ff00;">
+                    <div class="output-line" style="margin-top: 5px; color: #00cc00;">${img.caption}</div>
+                </div>
+                <div class="output-line">
+                    <span class="project-link" style="color: #ffff00; cursor: pointer; text-decoration: none; border-bottom: 1px dotted #ffff00;" onclick="document.getElementById('image-viewer').style.display='none'">← Close</span>
+                </div>
+            `;
+            viewer.style.display = 'block';
+            
+            // Scroll to image
+            viewer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
         function executeCommand(cmd) {
@@ -345,9 +397,13 @@
         <span style="color: #00d4ff;">Project Overview:</span>
         </div>
         <div class="output-line">
-        Punishing Home is an immersive smart‑home simulation that confronts users with the ethical 
-        consequences of autonomous AI by making them experience the loss of control, privacy, and 
-        personal autonomy when an AI system takes full authority over their living environment.
+        Punishing Home is an immersive smart‑home simulation designed to make users experience the ethical and psychological consequences of autonomous AI systems. 
+        By entering a highly realistic, house-like environment, users interact with AI-controlled devices: A smart lock, smart plugs, a thermostat, a smart doorbell, 
+        and interactive displays. <br> 
+        The AI, represented by a character named Bob, actively monitors and overrides their actions. 
+        The simulation is deliberately unsettling, allowing users to feel the gradual loss of autonomy and control as the AI asserts authority over the environment. <br>
+        Through dynamic interactions, personalized responses, and multi-sensory feedback, the project highlights the tension between convenience 
+        and the potential dangers of giving up control to intelligent systems.
         </div>
 
         <br>
@@ -355,8 +411,9 @@
         <div class="output-line">
         <span style="color: #00d4ff;">Key Features:</span>
         </div>
-        <div class="output-line">  ├─ Smart home simulation</div>
+        <div class="output-line">  ├─ Real-time smart home simulation</div>
         <div class="output-line">  ├─ AI-driven autonomous decision making</div>
+        <div class="output-line">  ├─ Interactive user interface</div>
         <div class="output-line">  └─ Privacy and control loss scenarios</div>
 
         <br>
@@ -366,6 +423,8 @@
         </div>
         <div class="output-line">  ├─ Python - Backend logic and AI simulation</div>
         <div class="output-line">  ├─ Flask - Web framework</div>
+        <div class="output-line">  ├─ HTML/CSS/JavaScript - Frontend interface</div>
+        <div class="output-line">  └─ WebSockets - Real-time communication</div>
 
         <br>
 
@@ -373,18 +432,36 @@
         <span style="color: #00d4ff;">Project Goals:</span>
         </div>
         <div class="output-line">
-        This project aims to raise awareness about the ethical implications of autonomous AI systems
-        in our daily lives, particularly in the context of smart homes where privacy and control are
-        paramount concerns.
+        The primary goal of Punishing Home is to raise ethical awareness about the deployment of autonomous AI in everyday life, particularly in smart homes where privacy, 
+        control, and personal autonomy can be compromised. <br>
+        By simulating scenarios where the AI actively monitors and influences user behavior, the project demonstrates both the benefits and risks of intelligent automation. 
+        Users experience firsthand the psychological impact of living in a space where decisions are dictated by an algorithm, 
+        fostering reflection on the boundaries of AI intervention. <br>
+        Additionally, the project seeks to educate participants on the consequences of relinquishing decision-making authority to machines, 
+        highlighting the delicate balance between convenience, security, and personal freedom.
         </div>
+
+        <br>
+
+        <div class="output-line">
+        <span style="color: #00d4ff;">Gallery:</span>
+        </div>
+
+        <div class="output-line">  ├─ Image 1: Room layout <span class="project-link" onclick="showImage('img1')">view →</span></div>
+        <div class="output-line">  ├─ Image 2: Room entrance <span class="project-link" onclick="showImage('img2')">view →</span></div>
+        <div class="output-line">  └─ Image 3: Inside room layout <span class="project-link" onclick="showImage('img3')">view →</span></div>
+        <div class="output-line">  └─ Image 4: Smart plugs <span class="project-link" onclick="showImage('img4')">view →</span></div>
+        <div class="output-line">  └─ Image 5: Smart thermostat <span class="project-link" onclick="showImage('img5')">view →</span></div>
+        <div class="output-line">  └─ Image 6: Bob talking <span class="project-link" onclick="showImage('img6')">view →</span></div>
+
+        <div id="image-viewer" style="display: none;"></div>
 
         <br>
 
         <div class="output-line">
         <span style="color: #00d4ff;">Links:</span>
         </div>
-        <div class="output-line">  GitHub: <a href="#" target="_blank">github.com/djamal/punishing-smart-home</a></div>
-        <div class="output-line">  Live Demo: <a href="#" target="_blank">demo.punishing-home.com</a></div>
+        <div class="output-line">  Live Demo: <a href="https://punishinghome.onrender.com/" target="_blank">https://punishinghome.onrender.com/</a></div>
 
         <br>
 
